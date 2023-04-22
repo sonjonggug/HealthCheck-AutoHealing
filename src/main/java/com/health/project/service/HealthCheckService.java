@@ -70,7 +70,7 @@ public class HealthCheckService {
                 outputBuffer.append(new String(tmp, 0, i));
                 if (i < 0) break;
             }
-            // 명령어의 실행이 끝나면, 실행 결과를 분석합니다
+            // 명령어의 실행이 끝나면, 실행 결과를 분석
             if (channel.isClosed()) {
             	
 //            	System.out.println("1212"+outputBuffer.toString());
@@ -82,7 +82,7 @@ public class HealthCheckService {
                 	result = "N";
                 }
                                             
-                // SSH 연결을 종료하고, 결과값을 반환합니다.
+                // SSH 연결을 종료하고, 결과값을 반환
                 channel.disconnect();
                 session.disconnect();
                 
@@ -152,7 +152,7 @@ public class HealthCheckService {
                 outputBuffer.append(new String(tmp, 0, i));
                 if (i < 0) break;
             }
-            // 명령어의 실행이 끝나면, 실행 결과를 분석합니다
+            // 명령어의 실행이 끝나면, 실행 결과를 분석
             if (channel.isClosed()) {
             	            	           	
               boolean bool = outputBuffer.toString().contains("successfully");     
@@ -163,7 +163,7 @@ public class HealthCheckService {
                	result = "N";
                }
                
-                // SSH 연결을 종료하고, 결과값을 반환합니다.
+                // SSH 연결을 종료하고, 결과값을 반환
                 channel.disconnect();
                 session.disconnect();
                 return result;

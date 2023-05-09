@@ -41,7 +41,7 @@ public class HealthCheckHealingApplication {
 			Constans.one_seq = 1;
 			log.info("pointer "+ Constans.SUCCESS);
 //			재기동 실패 시 계속 재기동 시키면 안되기에 처음 한번 , 1시간되면 한번 더 재기동
-		}else if(Constans.one_seq == 1 || Constans.one_seq==6){
+		}else if(Constans.one_seq == 1 || Constans.one_seq % 6 == 0){
 			Boolean YN = watchDogService.ifProcDown("pointer");
 			if(YN) {				
 				Constans.one_seq = 1;
@@ -61,7 +61,7 @@ public class HealthCheckHealingApplication {
 			Constans.two_seq = 1;
 			log.info("pointer_example "+ Constans.SUCCESS);
 		// 재기동 실패 시 계속 재기동 시키면 안되기에 처음 한번 , 1시간되면 한번 더 재기동
-		}else if(Constans.two_seq == 1 || Constans.two_seq==6){
+		}else if(Constans.two_seq == 1 || Constans.two_seq % 6 == 0){
 			Boolean YN = watchDogService.ifProcDown("pointer_example");
 			if(YN) {				
 				Constans.two_seq = 1;
@@ -81,7 +81,7 @@ public class HealthCheckHealingApplication {
 			Constans.three_seq = 1;
 			log.info("poodle "+ Constans.SUCCESS);
 //			재기동 실패 시 계속 재기동 시키면 안되기에 처음 한번 , 1시간되면 한번 더 재기동 및 SMS 발송
-		}else if(Constans.three_seq == 1 || Constans.three_seq == 6){
+		}else if(Constans.three_seq == 1 || Constans.three_seq % 6 == 0){
 			Boolean YN = watchDogService.ifProcDown("poodle");
 			if(YN) {				
 				Constans.three_seq = 1;

@@ -23,6 +23,10 @@ public class HealthCheckHealingApplication {
 	private final WatchDogService watchDogService ;	
 	private final SendService sendService;
 	
+	public static int one_seq = 1 ;
+	public static int two_seq = 1 ;
+	public static int three_seq = 1 ;
+	
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(HealthCheckHealingApplication.class, args);
 		
@@ -30,78 +34,46 @@ public class HealthCheckHealingApplication {
 	}
 	
 	
-	@Scheduled(fixedRate = 30000) // 테스트용 30초
-    public void checkServerProcess() throws Exception {        	       		
-		
+	@Scheduled(fixedRate = 300000) // 테스트용 30초 , 600000 -> 10분 
+    public void checkServerProcess() {        	       				
 		try {
-			
-		HashMap<String, Boolean> result = watchDogService.serverConnect();				
+				// 프로세스 떠 있는지 확인	
+								
+				String proccess = null;
+				String serviceName = null;
 				
-		if(result.get("pointer")) {			
-			Constans.one_seq = 1;
-			log.info("pointer "+ Constans.SUCCESS);
-//			재기동 실패 시 계속 재기동 시키면 안되기에 처음 한번 , 1시간되면 한번 더 재기동
-		}else if(Constans.one_seq == 1 || Constans.one_seq % 6 == 0){
-			Boolean YN = watchDogService.ifProcDown("pointer");
-			if(YN) {				
-				Constans.one_seq = 1;
-				log.info("pointer "+ Constans.RESTART_SUCESS);
-			} else {
-				Constans.one_seq += 1;
-				sendService.SendMail(Constans.one_seq , "pointer");
-				log.info("pointer "+ Constans.RESTART_FAIL);				
-			}
-		} else {
-			Constans.one_seq += 1;
-			log.info("pointer "+ Constans.FAIL);
-		}
-		
-		
-		if(result.get("pointer_example")) {			
-			Constans.two_seq = 1;
-			log.info("pointer_example "+ Constans.SUCCESS);
-		// 재기동 실패 시 계속 재기동 시키면 안되기에 처음 한번 , 1시간되면 한번 더 재기동
-		}else if(Constans.two_seq == 1 || Constans.two_seq % 6 == 0){
-			Boolean YN = watchDogService.ifProcDown("pointer_example");
-			if(YN) {				
-				Constans.two_seq = 1;
-				log.info("pointer_example "+ Constans.RESTART_SUCESS);
-			} else {
-				Constans.two_seq += 1;
-				sendService.SendMail(Constans.two_seq , "pointer_example");
-				log.info("pointer_example "+ Constans.RESTART_FAIL);				
-			}
-		} else {
-			Constans.two_seq += 1;
-			log.info("pointer_example "+ Constans.FAIL);
-		}
-		
-		
-		if(result.get("poodle")) {			
-			Constans.three_seq = 1;
-			log.info("poodle "+ Constans.SUCCESS);
-//			재기동 실패 시 계속 재기동 시키면 안되기에 처음 한번 , 1시간되면 한번 더 재기동 및 SMS 발송
-		}else if(Constans.three_seq == 1 || Constans.three_seq % 6 == 0){
-			Boolean YN = watchDogService.ifProcDown("poodle");
-			if(YN) {				
-				Constans.three_seq = 1;
-				log.info("poodle "+ Constans.RESTART_SUCESS);
-			} else {
-				Constans.three_seq += 1;
-				sendService.SendMail(Constans.three_seq , "poodle");
-				log.info("poodle "+ Constans.RESTART_FAIL);				
-			}
-		} else {
-			Constans.three_seq = 1;
-			log.info("poodle "+ Constans.FAIL);
-		}
-	 	
-			} catch (Exception e) {
-			  e.printStackTrace();
-			  log.info("Exception Error -----------------> ");
-			}
+				HashMap<String, Object> result = watchDogService.serverConnect();
+				
+				for(int i = 0 ; result.size()/2 > i; i++) {
+					serviceName = "serviceName_"+i;
+					proccess = "process_"+i;
+				
+				if((boolean) result.get(proccess)) {			
+					one_seq = 1;
+					log.info(result.get(serviceName) + Constans.SUCCESS);
+				// 재기동 실패 시 계속 재기동 시키면 안되기에 처음 한번 , 1시간 마다 재기동
+				}else if(one_seq == 1 || one_seq % 6 == 0){
+					Boolean restartYN = watchDogService.restart((String) result.get(serviceName));
+					if(restartYN) {				
+						one_seq = 1;
+						sendService.SendRestartSuccess(one_seq , (String) result.get(serviceName));
+						log.info((String) result.get(serviceName)+ Constans.RESTART_SUCESS);
+					} else {
+						one_seq += 1;
+						sendService.SendRestartFail(one_seq , (String) result.get(serviceName));
+						log.info((String) result.get(serviceName)+ Constans.RESTART_FAIL);				
+					}
+				} else {
+					one_seq += 1;
+					log.info("pomeranian_sso "+ Constans.FAIL);
+					}
+				
+				} // for 문 끝 
+			
+					} catch (Exception e) {
+					  e.printStackTrace();
+					  log.info("Exception Error -----------------> ");
+					}
     }
+				
 }
-
-
-

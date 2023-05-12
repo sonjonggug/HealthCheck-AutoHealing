@@ -38,35 +38,26 @@ public class HealthCheckHealingApplication {
     public void checkServerProcess() {        	       				
 		try {
 				// 프로세스 떠 있는지 확인	
-								
-				String proccess = null;
-				String serviceName = null;
+											
 				
-				HashMap<String, Object> result = watchDogService.serverConnect();
+				HashMap<String, Boolean> result = watchDogService.serverConnect();
+												
+				for(String proccessName : result.keySet()) {
 				
-				for(int i = 0 ; result.size()/2 > i; i++) {
-					serviceName = "serviceName_"+i;
-					proccess = "process_"+i;
-				
-				if((boolean) result.get(proccess)) {			
-					one_seq = 1;
-					log.info(result.get(serviceName) + Constans.SUCCESS);
-				// 재기동 실패 시 계속 재기동 시키면 안되기에 처음 한번 , 1시간 마다 재기동
-				}else if(one_seq == 1 || one_seq % 6 == 0){
-					Boolean restartYN = watchDogService.restart((String) result.get(serviceName));
-					if(restartYN) {				
-						one_seq = 1;
-						sendService.SendRestartSuccess(one_seq , (String) result.get(serviceName));
-						log.info((String) result.get(serviceName)+ Constans.RESTART_SUCESS);
-					} else {
-						one_seq += 1;
-						sendService.SendRestartFail(one_seq , (String) result.get(serviceName));
-						log.info((String) result.get(serviceName)+ Constans.RESTART_FAIL);				
+					if(result.get(proccessName)) {			
+						log.info(proccessName + Constans.SUCCESS);
+					}else {
+						Boolean restartYN = watchDogService.restart(proccessName);
+						
+						if(restartYN) {
+							sendService.SendRestartSuccess(one_seq , proccessName);
+							log.info(proccessName+ Constans.RESTART_SUCESS);
+						}else {
+							sendService.SendRestartFail(one_seq , proccessName);
+							log.info(proccessName + Constans.RESTART_FAIL);	
+						}
 					}
-				} else {
-					one_seq += 1;
-					log.info("pomeranian_sso "+ Constans.FAIL);
-					}
+					
 				
 				} // for 문 끝 
 			

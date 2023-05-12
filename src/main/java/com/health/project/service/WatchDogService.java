@@ -36,7 +36,7 @@ public class WatchDogService {
 	String processName ;
 
 	
-public HashMap<String, Object> serverConnect() throws Exception{
+public HashMap<String, Boolean> serverConnect() throws Exception{
 		
 		log.info("서버 프로세스 확인 중..... " + processName);
 		
@@ -78,29 +78,22 @@ public HashMap<String, Object> serverConnect() throws Exception{
             // 명령어의 실행이 끝나면, 실행 결과를 분석
             if (channel.isClosed()) {            	            	
             	
+            	// processName 을 | 기준으로 잘라서 리스트에 넣기
             	List<String> list = Arrays.asList(processName.split("\\|"));
-            	HashMap<String, Object> map = new HashMap<String, Object>();
+            	HashMap<String, Boolean> map = new HashMap<String, Boolean>();
             	String serviceName = null;
             	String proccessYN = null;
             	
+            	// 리스트 사이즈만큼 돌면서 map에 담기
             	for(int i = 0 ; list.size() > i; i++) {
-            		serviceName = "serviceName_"+i;
-            		proccessYN = "process_"+i;
-            		System.out.println("체크 할 ServiceName --------> " + list.get(i));
-            		
-            		map.put(serviceName , list.get(i));
+//            		serviceName = "serviceName_"+i;
+//            		proccessYN = "process_"+i;
+            		proccessYN = list.get(i);
+//            		map.put(serviceName , list.get(i));
             		map.put(proccessYN , outputBuffer.toString().contains("-DSERVICE_NAME="+list.get(i)));
-            	
+            		log.info(list.get(i)+ " 동작 상태 --------> " + map.get(proccessYN));            	
             	}
-            	
-            	for(int i = 0 ; list.size() > i; i++) {
-            		serviceName = "serviceName_"+i;
-            		proccessYN = "process_"+i;            		
-            		
-            		System.out.println( map.get(serviceName) + " 동작 상태 --------> " + map.get(proccessYN));
-            		            		
-            	}
-            	
+            	            	            	            	
 //                boolean pomeranian_sso = outputBuffer.toString().contains("-DSERVICE_NAME=pomeranian_sso");
 //                boolean pomeranian_gasmon_m = outputBuffer.toString().contains("-DSERVICE_NAME=pomeranian_gasmon_m");
 //                boolean heavymachine = outputBuffer.toString().contains("-DSERVICE_NAME=pomeranian_heavymachine");
@@ -152,13 +145,13 @@ public HashMap<String, Object> serverConnect() throws Exception{
         // 실행시킬 명령어를 입력
         if(serverName.equals("pomeranian_sso")) {
         	log.info(serverName+" shell 실행-------> 1");
-        	channelExec.setCommand("cd /neonexsoft/apps/iwest/pomeranian_sso/bin ; ./tomcat.sh start");	
+        	channelExec.setCommand("cd /neonexsoft/apps/iwest/pomeranian_sso/bin ; ./tomcat.sh start ");	
         }else if (serverName.equals("pomeranian_gasmon_m")) {
         	log.info(serverName+" shell 실행-------> 2");
-        	channelExec.setCommand("cd /neonexsoft/apps/iwest/pomeranian_gasmon_m/bin ; ./tomcat.sh start");
+        	channelExec.setCommand("cd /neonexsoft/apps/iwest/pomeranian_gasmon_m/bin ; ./tomcat.sh start ");        	    
         }else if (serverName.equals("pomeranian_heavymachine")) {
         	log.info(serverName+" shell 실행-------> 3");
-        	channelExec.setCommand("cd /neonexsoft/apps/iwest/pomeranian_heavymachine/bin/ ; ./tomcat.sh start");
+        	channelExec.setCommand("cd /neonexsoft/apps/iwest/pomeranian_heavymachine/bin/ ; ./tomcat.sh start ");
         }
           
         
@@ -176,9 +169,12 @@ public HashMap<String, Object> serverConnect() throws Exception{
                 outputBuffer.append(new String(tmp, 0, i));
                 if (i < 0) break;
             }
+            
+            
             // 명령어의 실행이 끝나면, 실행 결과를 분석
             if (channel.isClosed()) {
                 
+            	System.out.println(outputBuffer.toString());
 //            	
 //            	boolean pomeranian_sso = outputBuffer.toString().contains("-DSERVICE_NAME=pomeranian_sso");
 //            	boolean pomeranian_gasmon_m = outputBuffer.toString().contains("-DSERVICE_NAME=pomeranian_gasmon_m");
@@ -189,11 +185,12 @@ public HashMap<String, Object> serverConnect() throws Exception{
 //                	bool = true;
 //                }
                            
-                // SSH 연결을 종료하고, 결과값을 반환
-                channel.disconnect();
-                session.disconnect();                               
-            }      
-            Thread.sleep(25000); // 25초
+                // SSH 연결을 종료하고, 결과값을 반환                                             
+            }
+            Thread.sleep(10000); // 25초
+            channel.disconnect();
+            session.disconnect();  
+            
             return restartCheck(serverName);
         } 
 				

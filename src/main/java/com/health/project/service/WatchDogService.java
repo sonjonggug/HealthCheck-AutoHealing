@@ -86,23 +86,12 @@ public HashMap<String, Boolean> serverConnect() throws Exception{
             	
             	// 리스트 사이즈만큼 돌면서 map에 담기
             	for(int i = 0 ; list.size() > i; i++) {
-//            		serviceName = "serviceName_"+i;
-//            		proccessYN = "process_"+i;
             		proccessYN = list.get(i);
-//            		map.put(serviceName , list.get(i));
+
             		map.put(proccessYN , outputBuffer.toString().contains("-DSERVICE_NAME="+list.get(i)));
             		log.info(list.get(i)+ " 동작 상태 --------> " + map.get(proccessYN));            	
             	}
-            	            	            	            	
-//                boolean pomeranian_sso = outputBuffer.toString().contains("-DSERVICE_NAME=pomeranian_sso");
-//                boolean pomeranian_gasmon_m = outputBuffer.toString().contains("-DSERVICE_NAME=pomeranian_gasmon_m");
-//                boolean heavymachine = outputBuffer.toString().contains("-DSERVICE_NAME=pomeranian_heavymachine");
-//                
-//                hashMap.put("pomeranian_sso", pomeranian_sso);
-//                hashMap.put("pomeranian_gasmon_m", pomeranian_gasmon_m);
-//                hashMap.put("heavymachine", heavymachine);
-                                                
-//                log.info("서버 명령어 결과 ------> " + outputBuffer.toString());                               
+            	            	            	            	                            
                                             
                 // SSH 연결을 종료하고, 결과값을 반환
                 channel.disconnect();
@@ -175,15 +164,6 @@ public HashMap<String, Boolean> serverConnect() throws Exception{
             if (channel.isClosed()) {
                 
             	System.out.println(outputBuffer.toString());
-//            	
-//            	boolean pomeranian_sso = outputBuffer.toString().contains("-DSERVICE_NAME=pomeranian_sso");
-//            	boolean pomeranian_gasmon_m = outputBuffer.toString().contains("-DSERVICE_NAME=pomeranian_gasmon_m");
-//                boolean heavymachine = outputBuffer.toString().contains("-DSERVICE_NAME=heavymachine");     
-//                
-//                
-//                if(pomeranian_sso | pomeranian_gasmon_m | heavymachine) {
-//                	bool = true;
-//                }
                            
                 // SSH 연결을 종료하고, 결과값을 반환                                             
             }

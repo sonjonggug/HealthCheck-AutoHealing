@@ -1,6 +1,8 @@
 package com.health.project.service;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -21,26 +23,24 @@ public class SendService {
 	
 	
 	
-	public boolean SendRestartSuccess(int SendSeq , String serverName) {
-		
-		if(SendSeq == 1) {
-			log.info("메일 발송 -------> " + ip + ":" + port + " 에 " + serverName + " " + Constans.RESTART_SUCESS);
-		}else {
-			log.info("메일 발송 -------> " + ip + ":" + port + " 에 " + serverName + " " + Constans.RESTART_FAIL + " (경과시간 " + SendSeq + "0분)");
-		}
-		
+	public boolean SendRestartSuccess(List<String> proccessStatus) {
+											
+			log.info("메일 발송 -------> " + ip + ":" + port + " 에 " + proccessStatus.get(0) + " " + Constans.RESTART_SUCESS );
+				
 		return true;
 	}
 	
-	public boolean SendRestartFail(int SendSeq , String serverName) {
+	public boolean SendRestartFail(List<String> proccessStatus) {
+				
+		int errCheckSum = Integer.parseInt(proccessStatus.get(4)); 
 		
-		if(SendSeq == 1) {
-			log.info("메일 발송 -------> " + ip + ":" + port + " 에 " + serverName + " " + Constans.RESTART_SUCESS );
-		}else {
-			log.info("메일 발송 -------> " + ip + ":" + port + " 에 " + serverName + " " + Constans.RESTART_FAIL + " (경과시간 " + SendSeq + "0분)");
-		}
+			if (errCheckSum % 5 == 0) { // 5분마다 SMS 발송
+				log.info("메일 발송 -------> " + ip + ":" + port + " 에 " + proccessStatus.get(0) + " " + Constans.RESTART_FAIL + " (경과시간 " + errCheckSum + " 분)");		    
+			} 
 						
+			log.info("-------> " + ip + ":" + port + " 에 " + proccessStatus.get(0) + " " + Constans.RESTART_FAIL);	
 		
+			
 		return true;
 	}
 

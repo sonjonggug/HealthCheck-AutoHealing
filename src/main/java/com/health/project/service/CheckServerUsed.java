@@ -73,7 +73,7 @@ public class CheckServerUsed {
 	    
 	    // 셸 입력
 	    
-	    outputStream.write(("free -h | awk 'NR==2 {print $7}'" + "\n").getBytes()); // 메모리 사용률 
+	    outputStream.write(("free -h | awk 'NR==2 {print $7}'" + "\n").getBytes()); // 사용가능한 avliable 용량 체크 ( available은 시스템에서 현재 사용 가능한 메모리의 양 )
 	    outputStream.write(("top -bn 1 | awk '/%Cpu/ { print $2 \"%!\" }'" + "\n").getBytes()); // CPU 사용률 , 값 추출을 위해 사용량 %! 으로 출력후 변환
 	    outputStream.write(("df -h | awk 'NR>1 && int(substr($5, 1, length($5)-1)) > 80 {gsub(/%/, \"%_\"); print}'" + "\n").getBytes()); // 디스크 사용량 80퍼 초과 시 , 값 추출을 위해 사용량 %_ 으로 출력후 변환
      	     	
@@ -100,15 +100,10 @@ public class CheckServerUsed {
 	    		if(!line.contains("{")) {
 	    			diskUsed.add(line.replace("%_", "%"));
 	    		}	    		
-	    	};
-	    	
-	    	       
+	    	};	    		    	       
 	    }
 	    
 	    InetAddress localhost = InetAddress.getLocalHost();
-        
-        String hostName = localhost.getHostName();
-        String ipAddress = localhost.getHostAddress();
 	                    
 	    System.out.println("ramUsed : " + ramUsed);
 	    System.out.println("cpuUsed : " + cpuUsed);
@@ -117,16 +112,16 @@ public class CheckServerUsed {
 	    	System.out.println("diskUsed : "+diskUsed.get(i));
 	    }
 	    
-	    System.out.println(hostName);
-	    System.out.println(ipAddress);
+	    System.out.println("HostName : " + localhost.getHostName());
+//	    System.out.println(localhost.getHostAddress());
+	    
 	    // 자원 해제
 	    bufferedReader.close();
 	    inputStream.close();
 	    outputStream.close();
 	    channel.disconnect();
 	    session.disconnect();      	    	    	
-	    	
-	    	        
+	    		    	        
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;		

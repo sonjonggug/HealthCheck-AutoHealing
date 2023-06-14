@@ -81,11 +81,11 @@ public ArrayList<List<String>> serverConnect(ArrayList<List<String>> list) {
             	            	            	
             	for(int i = 0; i < list.size(); i++) {              		            		            		
             		if(outputBuffer.toString().contains("-DSERVICE_NAME="+list.get(i).get(0))) {
-            			System.out.println("프로세스 정상---> " + list.get(i).get(0));
+            			log.info("프로세스 정상---> " + list.get(i).get(0));
             			list.get(i).set(3, "Y"); // 프로세스 상태 유무
             			list.get(i).set(4, "0"); // 프로세스 장애 횟수 : 0 정상 / 1~ 장애
             		} else {
-            			System.out.println("프로세스 다운---> " + list.get(i).get(0));
+            			log.info("프로세스 다운---> " + list.get(i).get(0));            			
             			list.get(i).set(3, "N");            			          		
             		}            		                      	
             	}     

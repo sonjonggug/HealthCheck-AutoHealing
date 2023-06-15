@@ -28,7 +28,14 @@
 			<artifactId>mybatis-spring-boot-starter</artifactId>
 			<version>3.0.0</version>
 		</dependency>
-
+		
+		<!-- Tibero JDBC -->
+		<dependency>
+			<groupId>com.tmax.tibero</groupId>
+			<artifactId>tibero6-jdbc</artifactId>
+			<version>6.0.156305</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>

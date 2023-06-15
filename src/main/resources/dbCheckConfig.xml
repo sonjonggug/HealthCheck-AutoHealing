@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ 
+<configuration>
+    <typeAliases>
+        <typeAlias alias="DbCheckVo" type="com.watchDog.project.model.DbCheckVo"/>        
+    </typeAliases>
+ 
+    <environments default="development">
+        <environment id="development">
+          <transactionManager type="JDBC"/>
+            <!--  connecting to Local -->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.tmax.tibero.jdbc.TbDriver"/>
+                <property name="url" value="jdbc:tibero:thin:@192.168.11.133:8629:tibero"/>
+                <property name="username" value="npa_merge"/>
+                <property name="password" value="npa_merge"/>
+            </dataSource>
+       </environment>
+    </environments>
+    <mappers>
+       <mapper resource="sqlMap/dbCheck.xml"/>
+    </mappers>
+</configuration>

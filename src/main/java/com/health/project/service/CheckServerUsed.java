@@ -41,7 +41,7 @@ public class CheckServerUsed {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean checkRamUsed(){
+	public boolean checkServerUsed(){
 		
 	try {
 		

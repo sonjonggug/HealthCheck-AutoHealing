@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dbCheck">
+
+	<insert id="dbCheckInsert" parameterType="DbCheckVo">
+		INSERT INTO TVO_BRANCH_EQ_STATUS_STAT 
+			( 
+				COLLECTION_DATE
+				,COL_TIME
+				,CPU_AVG_USAGE
+				,CPU_MAX_USAGE
+				,CPU_MAX_USAGE_TIME
+				,MEMORY_AVG_USAGE
+				,MEMORY_MAX_USAGE
+				,MEMORY_MAX_USAGE_TIME
+				,REC_BPM_AVG
+				,REC_BPM_MAX
+				,REC_BPM_ACC
+				,REC_BPM_MAX_TIME
+				,REC_PPM_AVG
+				,REC_PPM_MAX
+				,REC_PPM_ACC
+				,REC_PPM_MAX_TIME
+				,BRANCH_CODE
+				,AREA_CODE
+		     	,SERV_SEQ
+				,MODEL_CODE
+			)
+		VALUES
+			(
+				to_char(sysdate,'yyyyMMdd')
+				,to_char(sysdate,'dd')
+				,0
+				,0
+				,'000000'
+				,0
+				,0
+				,'000000'
+				,0
+				,0
+				,0
+				,'000000'
+				,0
+				,0
+				,0
+				,'000000'
+			    ,99999
+			    ,'ZZ'
+			    ,999
+			    ,'99999'
+			)
+	</insert>
+	
+	<update id="dbCheckUpdate" parameterType="DbCheckVo">
+		UPDATE TVO_BRANCH_EQ_STATUS_STAT
+		   SET REC_BPM_MAX_TIME = '080000' 
+		 WHERE BRANCH_CODE = 99999 
+		   AND AREA_CODE = 'ZZ' 
+		   AND SERV_SEQ = 999 
+		   AND MODEL_CODE = '99999'
+	</update>
+	
+	<delete id="dbCheckDelete" parameterType="int">
+		DELETE FROM TVO_BRANCH_EQ_STATUS_STAT 
+		WHERE BRANCH_CODE = 99999 
+		AND AREA_CODE = 'ZZ' 
+		AND SERV_SEQ = 999 
+		AND MODEL_CODE = '99999'
+	</delete>
+	
+</mapper> 
